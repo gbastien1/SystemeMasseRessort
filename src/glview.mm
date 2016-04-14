@@ -42,21 +42,8 @@ NSArray* open_files(NSArray* filetype_ext)
 }
 
 // AL Variables used for the animation in the wave shader. Kind of ugly but this is a prototype.
-static float angle = 0;
-static float amplitude = 0;
-static float frequence = 0;
-static float vitesse = 0;
-static float curAnimTime = 0;
 static bool simulating = false;
-static bool goingUp = true;
 
-const float targetAngle = 45;
-const float targetAmplitude = 1;
-const float targetFrequence = 2;
-const float targetVitesse = 5;
-const float startVitesse = 5;
-const float startFrequence = 1.5;
-const float animTime = 5;
 
 
 
@@ -356,14 +343,9 @@ NSString* choose_image_file()
     [[NSRunLoop currentRunLoop]addTimer:frame_timer forMode: NSDefaultRunLoopMode];
    
     //AL Restart animation values when stop is pressed
-    angle = 0;
-    amplitude = 0;
-    frequence = startFrequence;
-    vitesse = startVitesse;
-    curAnimTime = 0;
     simulating = true;
-    goingUp = true;
-    
+
+    //TODO : Start Vector field
     
 }
 
@@ -377,11 +359,8 @@ NSString* choose_image_file()
     
     //AL Reset animation values when stop is pressed
     simulating = false;
-    angle = 0;
-    amplitude = 0;
-    frequence = startFrequence;
-    vitesse = startVitesse;
-    curAnimTime = 0;
+    
+    //TODO : Reset Vector field
 }
 
 
@@ -431,9 +410,6 @@ static const float rot_factor = 0.25;
     
     // AL Get real time based on test_counter and interval
     float realTime = test_counter / 60.0;
-    [renderer set_time:realTime];
-    //AL Calculate current anim Time
-    curAnimTime += 1 / 60.0;
     
     [self setNeedsDisplay:YES];
 
@@ -488,7 +464,7 @@ void setModelviewAttr(CRenderer *renderer, GLfloat rx, GLfloat ry, GLfloat rz, G
     setModelviewAttr(renderer, rx, ry, rz, cx, cy, cz);
     renderer->camposx = -2.0;
     renderer->camposy = 6.0;
-    [renderer render:drap:2];   //Render using wave shader
+    [renderer render:drap:0];   //Render using GL.TRIANGLES
     
     setModelviewAttr(renderer, rx, ry, rz, cx, cy, cz);
     
@@ -503,48 +479,8 @@ void setModelviewAttr(CRenderer *renderer, GLfloat rx, GLfloat ry, GLfloat rz, G
 //AL ABD Handle the animation of the wave shader properties
 -(void)Handle_animation{
     if(simulating) {
-        
-        if(!goingUp)
-        {
-            float step = 0.01;
-            angle = lerpf(angle, 0, step);
-            amplitude = lerpf(amplitude, 0, step);
-            frequence = lerpf(frequence, startFrequence, step);
-            vitesse = lerpf(vitesse, startVitesse, step);
-            
-            
-            if(fabsf(angle) < 0.25)
-            {
-                curAnimTime = 0;
-                angle = 0;
-                amplitude = 0;
-                frequence = startFrequence;
-                vitesse = startVitesse;
-                simulating = false;
-                goingUp = true;
-            }
-        }
-        else
-        {
-            float step = 0.04;
-            angle = lerpf(angle, targetAngle, step);
-            amplitude = lerpf(amplitude, targetAmplitude, step);
-            frequence = lerpf(frequence, targetFrequence, step);
-            vitesse = lerpf(vitesse, targetVitesse, step);
-            
-            if(curAnimTime >= animTime)
-            {
-                goingUp = false;
-            }
-        }
+        //TODO : Animate Vector field here
     }
-    //Send angle, amplitude, frequence and vitesse in uniform values in shader
-    [renderer set_angle:angle];
-    [renderer set_amplitude:amplitude];
-    [renderer set_frequence:frequence];
-    [renderer set_vitesse:vitesse];
-    
-    
 }
 
 
