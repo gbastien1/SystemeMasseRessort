@@ -35,6 +35,7 @@
 		ECAD626F1CA59198001FF085 /* Components.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ECAD626D1CA59198001FF085 /* Components.cpp */; settings = {ASSET_TAGS = (); }; };
 		ECE9A2BD1CA9C314001128EE /* wave.fsh in Resources */ = {isa = PBXBuildFile; fileRef = ECE9A2BC1CA9C314001128EE /* wave.fsh */; settings = {ASSET_TAGS = (); }; };
 		ECE9A2BF1CA9C31B001128EE /* wave.vsh in Resources */ = {isa = PBXBuildFile; fileRef = ECE9A2BE1CA9C31B001128EE /* wave.vsh */; settings = {ASSET_TAGS = (); }; };
+		ECEF02671CC02B95000666BA /* smr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ECEF02661CC02B95000666BA /* smr.cpp */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,6 +80,8 @@
 		ECAD626E1CA59198001FF085 /* Components.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Components.hpp; path = src/Components.hpp; sourceTree = "<group>"; };
 		ECE9A2BC1CA9C314001128EE /* wave.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = wave.fsh; path = shaders/wave.fsh; sourceTree = "<group>"; };
 		ECE9A2BE1CA9C31B001128EE /* wave.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = wave.vsh; path = shaders/wave.vsh; sourceTree = "<group>"; };
+		ECEF02661CC02B95000666BA /* smr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = smr.cpp; sourceTree = "<group>"; };
+		ECEF02681CC02CF4000666BA /* smr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = smr.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +114,8 @@
 				B123563B18C376B900D5EC60 /* main.m */,
 				ECAD626D1CA59198001FF085 /* Components.cpp */,
 				ECAD626E1CA59198001FF085 /* Components.hpp */,
+				ECEF02661CC02B95000666BA /* smr.cpp */,
+				ECEF02681CC02CF4000666BA /* smr.h */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -287,6 +292,7 @@
 				ECAD626F1CA59198001FF085 /* Components.cpp in Sources */,
 				B123564018C376B900D5EC60 /* main.m in Sources */,
 				B1D0C7DB1A289DF9007E1C2A /* mesh.mm in Sources */,
+				ECEF02671CC02B95000666BA /* smr.cpp in Sources */,
 				B123563D18C376B900D5EC60 /* glview.mm in Sources */,
 				B123563E18C376B900D5EC60 /* renderer.mm in Sources */,
 				B132F6E918C37B700020FC7D /* matrixutil.cpp in Sources */,
