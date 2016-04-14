@@ -5,6 +5,8 @@
 #include "mesh.h"
 #include "Components.hpp"
 
+#include "smr.h"
+
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
@@ -162,7 +164,8 @@ static CVReturn display_link_callback(CVDisplayLinkRef display_link,
     line->AllocVBOData();
      
     //creer drap
-    drap = new Drap();
+    CIntegrateur* integrateur = new CIntegrateur();
+    drap = new Drap(integrateur);
     drap->UpdateNormals();
     drap->AllocVBOData();
     

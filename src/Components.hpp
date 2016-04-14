@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "mesh.h"
+#include "smr.h"
 #include <iostream>
 
 using namespace std;
@@ -166,12 +167,16 @@ public:
  */
 class Drap : public CMesh {
 public:
-    Drap() {
+    Drap(CIntegrateur *integrateur) {
+        CSMR* smr = new CSMR();
+        float masse = 1;
         
         int index = 0;
         for(float i = 0; i < 30; i++) {
             for(float j = 0; j < 40; j++) {
-                vertices.push_back(new CVertex(index, CPoint3D(-0 + (j/10), 0 - (i/10), 0), (j / 40), ((i / 30))));
+                CVertex* v = new CVertex(index, CPoint3D(-0 + (j/10), 0 - (i/10), 0), (j / 40), ((i / 30)));
+                vertices.push_back(v);
+                smr->particules.push_back(new CParticule(v, masse));
                 index++;
                 
             }
