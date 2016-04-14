@@ -365,7 +365,6 @@ void CMesh::Draw(GLint prog)
 }
 
 
-//ABD function to draw GL_LINE instead of triangles
 void CMesh::DrawLine(GLint prog)
 {
     attrib_position = glGetAttribLocation(prog, "pos");
@@ -397,4 +396,9 @@ void CMesh::DrawLine(GLint prog)
     glDisableVertexAttribArray(attrib_position);
     glDisableVertexAttribArray(attrib_texcoord);
     glDisableVertexAttribArray(attrib_normal);
+}
+
+// GB AL vbo update
+void UpdateVBO() {
+    //glMapBuffer && glUnmapBuffer
 }
