@@ -398,7 +398,40 @@ void CMesh::DrawLine(GLint prog)
     glDisableVertexAttribArray(attrib_normal);
 }
 
-// GB AL vbo update
-void UpdateVBO() {
-    //glMapBuffer && glUnmapBuffer
+// GB VBO update
+void CMesh::UpdateVBO() {
+    glBindBuffer(GL_ARRAY_BUFFER, ogl_buf_vextex_id);
+    GLfloat* buf_vtx = (GLfloat*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
+    
+    //Transformations du VBO
+    //modifier vertices du mesh
+    for (int i = 0; i < vertices.size(); i++) {
+        //TODO do something
+        *vertices[i] += CPoint3D(0.01 ,0,0);
+    }
+    
+    //remplir buf_vtx avec les nouvelles données
+    GLfloat* pv = buf_vtx;
+    for ( int i = 0; i < vertices.size(); i++ )
+        pv = put_vertex(*vertices[i], pv);
+    
+    glBufferData(GL_ARRAY_BUFFER, vertex_data_size()*vertices.size(), buf_vtx, GL_STATIC_DRAW);
+    
+    glUnmapBuffer(GL_ARRAY_BUFFER);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

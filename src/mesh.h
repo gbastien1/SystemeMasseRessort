@@ -102,6 +102,8 @@ public:
     
     void    UpdateNormals();
     
+    void    UpdateVBO();
+    
 protected:
     
     // OpenGL

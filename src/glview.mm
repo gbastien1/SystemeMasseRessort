@@ -414,6 +414,8 @@ static const float rot_factor = 0.25;
     // AL Get real time based on test_counter and interval
     float realTime = test_counter / 60.0;
     
+    drap->UpdateVBO();
+    
     [self setNeedsDisplay:YES];
 
 }
