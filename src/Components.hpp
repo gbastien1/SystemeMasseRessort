@@ -164,17 +164,26 @@ public:
 /**
  * ABD
  * class to draw the sheet that will de distorted with "wind"
+ *
+ * GB
+ * Created Particules
+ *
+ * AL
+ * Created Springs
  */
 class Drap : public CMesh {
 public:
     Drap(CIntegrateur *integrateur) {
         CSMR* smr = new CSMR();
         float masse = 1;
+        int drapWidth = 40;
+        int drapHeight = 30;
         
+        //Create Vertex and particules
         int index = 0;
-        for(float i = 0; i < 30; i++) {
-            for(float j = 0; j < 40; j++) {
-                CVertex* v = new CVertex(index, CPoint3D(-0 + (j/10), 0 - (i/10), 0), (j / 40), ((i / 30)));
+        for(float i = 0; i < drapHeight; i++) {
+            for(float j = 0; j < drapWidth; j++) {
+                CVertex* v = new CVertex(index, CPoint3D(-0 + (j/10), 0 - (i/10), 0), (j / drapWidth), ((i / drapHeight)));
                 vertices.push_back(v);
                 smr->particules.push_back(new CParticule(v, masse));
                 index++;
@@ -182,77 +191,99 @@ public:
             }
         }
         
-        for(int i = 0; i < 29; i++) {
-            for(int j = 0; j < 39; j++) {
+        //Create Springs
+        for(float i = 0; i < drapHeight; i++) {
+            for(float j = 0; j < drapWidth; j++) {
+                int particuleIndex = (i*drapHeight) + (j*drapWidth);
+                //Lenght 1
+                if(i < (drapHeight-1)) //Vertical
+                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + (drapHeight * 0) + (drapWidth * (i+1))]));
+                if(j < (drapWidth-1)) //Horizontal
+                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + 1]));
+
+                //Lenght 2
+                if(i < (drapHeight-2)) //Vertical
+                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + (drapHeight * 1) + (drapWidth * (i+1))]));
+                if(i < (drapWidth-2)) //Horizontal
+                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + 2]));
+                if(i < (drapHeight-1) && j < (drapWidth-1) ) //Diagonal
+                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + 1 + (drapHeight * 0) + (drapWidth * (i+1))]));
+                
+            }
+        }
+        
+        //Create triangle
+        for(int i = 0; i < (drapHeight-1); i++) {
+            for(int j = 0; j < (drapWidth-1); j++) {
                 
                 if(i % 2 == 0) {
                     if(j % 2 == 0) {
                         
-                        CTriangle* tri1(new CTriangle(vertices[(i * 40) + (j + 1)], vertices[(i * 40) + j], vertices[((i + 1) * 40) + (j + 1)]));
-                        CTriangle* tri2(new CTriangle(vertices[((i + 1) * 40) + (j + 1)], vertices[(i * 40) + j], vertices[((i + 1) * 40) + j]));
+                        CTriangle* tri1(new CTriangle(vertices[(i * drapWidth) + (j + 1)], vertices[(i * drapWidth) + j], vertices[((i + 1) * drapWidth) + (j + 1)]));
+                        CTriangle* tri2(new CTriangle(vertices[((i + 1) * drapWidth) + (j + 1)], vertices[(i * drapWidth) + j], vertices[((i + 1) * drapWidth) + j]));
                         
                         triangles.push_back(tri1);
                         triangles.push_back(tri2);
                         
-                        vertices[(i * 40) + (j + 1)]->triangles.push_back(tri1);
-                        vertices[(i * 40) + j]->triangles.push_back(tri1);
-                        vertices[((i + 1) * 40) + (j + 1)]->triangles.push_back(tri1);
+                        vertices[(i * drapWidth) + (j + 1)]->triangles.push_back(tri1);
+                        vertices[(i * drapWidth) + j]->triangles.push_back(tri1);
+                        vertices[((i + 1) * drapWidth) + (j + 1)]->triangles.push_back(tri1);
                         
-                        vertices[((i + 1) * 40) + (j + 1)]->triangles.push_back(tri2);
-                        vertices[(i * 40) + j]->triangles.push_back(tri2);
-                        vertices[((i + 1) * 40) + j]->triangles.push_back(tri2);
+                        vertices[((i + 1) * drapWidth) + (j + 1)]->triangles.push_back(tri2);
+                        vertices[(i * drapWidth) + j]->triangles.push_back(tri2);
+                        vertices[((i + 1) * drapWidth) + j]->triangles.push_back(tri2);
                         
                     }
                     else {
                         
-                        CTriangle* tri1(new CTriangle(vertices[(i * 40) + (j + 1)], vertices[(i * 40) + j], vertices[((i + 1) * 40) + j]));
-                        CTriangle* tri2(new CTriangle(vertices[((i + 1) * 40) + (j + 1)], vertices[(i * 40) + (j + 1)], vertices[((i + 1) * 40) + j]));
+                        CTriangle* tri1(new CTriangle(vertices[(i * drapWidth) + (j + 1)], vertices[(i * drapWidth) + j], vertices[((i + 1) * drapWidth) + j]));
+                        CTriangle* tri2(new CTriangle(vertices[((i + 1) * drapWidth) + (j + 1)], vertices[(i * drapWidth) + (j + 1)], vertices[((i + 1) * drapWidth) + j]));
                         
                         triangles.push_back(tri1);
                         triangles.push_back(tri2);
                         
-                        vertices[(i * 40) + (j + 1)]->triangles.push_back(tri1);
-                        vertices[(i * 40) + j]->triangles.push_back(tri1);
-                        vertices[((i + 1) * 40) + j]->triangles.push_back(tri1);
+                        vertices[(i * drapWidth) + (j + 1)]->triangles.push_back(tri1);
+                        vertices[(i * drapWidth) + j]->triangles.push_back(tri1);
+                        vertices[((i + 1) * drapWidth) + j]->triangles.push_back(tri1);
                         
-                        vertices[((i + 1) * 40) + (j + 1)]->triangles.push_back(tri2);
-                        vertices[(i * 40) + (j + 1)]->triangles.push_back(tri2);
-                        vertices[((i + 1) * 40) + j]->triangles.push_back(tri2);
+                        vertices[((i + 1) * drapWidth) + (j + 1)]->triangles.push_back(tri2);
+                        vertices[(i * drapWidth) + (j + 1)]->triangles.push_back(tri2);
+                        vertices[((i + 1) * drapWidth) + j]->triangles.push_back(tri2);
                     }
                 }
                 else {
                     if(j % 2 == 0) {
                         
-                        CTriangle* tri1(new CTriangle(vertices[(i * 40) + (j + 1)], vertices[(i * 40) + j], vertices[((i + 1) * 40) + j]));
-                        CTriangle* tri2(new CTriangle(vertices[((i + 1) * 40) + (j + 1)], vertices[(i * 40) + (j + 1)], vertices[((i + 1) * 40) + j]));
+                        CTriangle* tri1(new CTriangle(vertices[(i * drapWidth) + (j + 1)], vertices[(i * drapWidth) + j], vertices[((i + 1) * drapWidth) + j]));
+                        CTriangle* tri2(new CTriangle(vertices[((i + 1) * drapWidth) + (j + 1)], vertices[(i * drapWidth) + (j + 1)], vertices[((i + 1) * drapWidth) + j]));
                         
                         triangles.push_back(tri1);
                         triangles.push_back(tri2);
                         
-                        vertices[(i * 40) + (j + 1)]->triangles.push_back(tri1);
-                        vertices[(i * 40) + j]->triangles.push_back(tri1);
-                        vertices[((i + 1) * 40) + j]->triangles.push_back(tri1);
+                        vertices[(i * drapWidth) + (j + 1)]->triangles.push_back(tri1);
+                        vertices[(i * drapWidth) + j]->triangles.push_back(tri1);
+                        vertices[((i + 1) * drapWidth) + j]->triangles.push_back(tri1);
                         
-                        vertices[((i + 1) * 40) + (j + 1)]->triangles.push_back(tri2);
-                        vertices[(i * 40) + (j + 1)]->triangles.push_back(tri2);
-                        vertices[((i + 1) * 40) + j]->triangles.push_back(tri2);
+                        vertices[((i + 1) * drapWidth) + (j + 1)]->triangles.push_back(tri2);
+                        vertices[(i * drapWidth) + (j + 1)]->triangles.push_back(tri2);
+                        vertices[((i + 1) * drapWidth) + j]->triangles.push_back(tri2);
                         
                     }
                     else {
                         
-                        CTriangle* tri1(new CTriangle(vertices[(i * 40) + (j + 1)], vertices[(i * 40) + j], vertices[((i + 1) * 40) + (j + 1)]));
-                        CTriangle* tri2(new CTriangle(vertices[((i + 1) * 40) + (j + 1)], vertices[(i * 40) + j], vertices[((i + 1) * 40) + j]));
+                        CTriangle* tri1(new CTriangle(vertices[(i * drapWidth) + (j + 1)], vertices[(i * drapWidth) + j], vertices[((i + 1) * drapWidth) + (j + 1)]));
+                        CTriangle* tri2(new CTriangle(vertices[((i + 1) * drapWidth) + (j + 1)], vertices[(i * drapWidth) + j], vertices[((i + 1) * drapWidth) + j]));
                         
                         triangles.push_back(tri1);
                         triangles.push_back(tri2);
                         
-                        vertices[(i * 40) + (j + 1)]->triangles.push_back(tri1);
-                        vertices[(i * 40) + j]->triangles.push_back(tri1);
-                        vertices[((i + 1) * 40) + (j + 1)]->triangles.push_back(tri1);
+                        vertices[(i * drapWidth) + (j + 1)]->triangles.push_back(tri1);
+                        vertices[(i * drapWidth) + j]->triangles.push_back(tri1);
+                        vertices[((i + 1) * drapWidth) + (j + 1)]->triangles.push_back(tri1);
                         
-                        vertices[((i + 1) * 40) + (j + 1)]->triangles.push_back(tri2);
-                        vertices[(i * 40) + j]->triangles.push_back(tri2);
-                        vertices[((i + 1) * 40) + j]->triangles.push_back(tri2);
+                        vertices[((i + 1) * drapWidth) + (j + 1)]->triangles.push_back(tri2);
+                        vertices[(i * drapWidth) + j]->triangles.push_back(tri2);
+                        vertices[((i + 1) * drapWidth) + j]->triangles.push_back(tri2);
                     }
                 }
             }
