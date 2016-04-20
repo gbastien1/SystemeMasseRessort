@@ -179,9 +179,12 @@ public:
         
         integrateur = _integrateur;
         CSMR* smr = new CSMR();
+        integrateur->smr = smr;
+        
         float masse = 1;
         int drapWidth = 40;
         int drapHeight = 30;
+        
         
         //Create Vertex and particules
         int index = 0;

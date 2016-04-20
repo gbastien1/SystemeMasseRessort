@@ -74,11 +74,26 @@ ostream& operator<<(ostream& os, const CTriangle& tri)
     return os;
 }
 
+CVertex& CVertex::operator=(const CVertex& P){
+    if ( &P != this )
+    {
+        X[0] = P.X[0];
+        X[1] = P.X[1];
+        X[2] = P.X[2];
+        u = P.u;
+        v = P.v;
+        idx = P.idx;
+    }
+    return *this;
+}
+
+
+
 
 #pragma mark -
 #pragma mark CMesh
 
-CMesh::CMesh() : 
+CMesh::CMesh() :
     diffuse_tex_id(0),
     ogl_buf_vextex_id(0),
     ogl_buf_index_id(0)
@@ -410,9 +425,11 @@ void CMesh::UpdateVBO(CIntegrateur* integrateur) {
     //modifier vertices du mesh
     for (int i = 0; i < vertices.size(); i++) {
         //TODO do something
-        //*vertices[i] += CPoint3D(0.01 ,0,0);
-        //*vertices[i] = integrateur->smr->particules[i]->vertex;
+        cout << i;
+        *vertices[i] = *integrateur->smr->particules[i]->vertex;;
+        //vertices[i] += CPoint3D(0.5 ,0,0);
     }
+    cout << endl;
     
     //remplir buf_vtx avec les nouvelles données
     GLfloat* pv = buf_vtx;

@@ -38,6 +38,8 @@ public:
         idx(_idx)
     {}
     
+    CVertex& operator=(const CVertex& P);
+    
     std::list<CTriangle*>   triangles;  // Triangles adjacents.
     
     CVect3D UpdateNormal();

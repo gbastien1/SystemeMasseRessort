@@ -53,7 +53,7 @@ public:
 public:
 	static const float	epsilon;
 
-private:
+protected:
 	float X[3];
 
 };
