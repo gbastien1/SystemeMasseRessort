@@ -109,7 +109,7 @@ public:
     
     void    UpdateNormals();
     
-    void    UpdateVBO(CIntegrateur* integrateur);
+    void    UpdateVBO(CIntegrateur* integrateur, float t);
     
 protected:
     
