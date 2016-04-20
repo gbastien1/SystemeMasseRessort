@@ -27,6 +27,14 @@ public:
 
 class CRessort {
 public:
+    CRessort(CParticule* _p0, CParticule* _p1, float _long = 0.1, float _k = 100) {
+        P0 = _p0;
+        P1 = _p1;
+        longueur_repos = _long;
+        k = _k;
+    }
+    
+    
     CParticule *P0, *P1;
     float longueur_repos;
     float k; //constante de Hooke (rigidité)
