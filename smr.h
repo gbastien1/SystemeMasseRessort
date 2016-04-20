@@ -16,12 +16,14 @@ public:
         vel[0] = CVect3D(0,0,0);
         vel[1] = CVect3D(0,0,0);
         masse = _masse;
+        force = CVect3D(0,0,0);
     }
     
     CVertex* vertex; //sommet du maillage associé à la particule
     CPoint3D pos[2];
     CVect3D vel[2];
     float masse;
+    CVect3D force;
 };
 
 class CRessort {
@@ -38,7 +40,14 @@ public:
     float longueur_repos;
     float k; //constante de Hooke (rigidité)
     
-    CVect3D F() const; //calcule la force du ressort
+    //calcule la force du ressort
+    CVect3D F() const {
+        return CVect3D(0,0,0);
+    }
+    //calcule la force du ressort
+    CVect3D F2() const {
+        return CVect3D(0,0,0);
+    }
 };
 
 class CSMR {
@@ -52,7 +61,27 @@ class CIntegrateur {
 public:
     CSMR* smr;
     
-    void step();
+    void step(){
+        
+        //Force de gravité
+        for(int i =0 ; i < smr->particules.size(); i++) {
+            smr->particules[i]->force = CVect3D(0,-10,0);
+        }
+        //Force des ressorts
+        for(int i =0 ; i < smr->ressorts.size(); i++) {
+            //cout << i << " F : " << smr->ressorts[i]->P1 << endl;
+            //smr->ressorts[i]->P0->force += smr->ressorts[i]->F();
+            //smr->ressorts[i]->P1->force += smr->ressorts[i]->F2();
+        }
+        //Force du vent
+        
+        
+        
+        //Updater position et velocite des particules en fonction de la force calculée
+        for(int i =0 ; i < smr->particules.size(); i++) {
+            
+        }
+    }
 };
 
 

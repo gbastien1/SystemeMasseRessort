@@ -199,25 +199,46 @@ public:
         }
         
         //Create Springs
+
         for(float i = 0; i < drapHeight; i++) {
             for(float j = 0; j < drapWidth; j++) {
-                int particuleIndex = (i*drapHeight) + (j*drapWidth);
+                int particuleIndex = (i*drapWidth) + (j);
                 //Lenght 1
-                if(i < (drapHeight-1)) //Vertical
+                if(i < (drapHeight-1)) { //Vertical
                     smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + (drapHeight * 0) + (drapWidth * (i+1))]));
-                if(j < (drapWidth-1)) //Horizontal
+
+                }
+                if(j < (drapWidth-1)) { //Horizontal
                     smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + 1]));
 
+                }
+
                 //Lenght 2
-                if(i < (drapHeight-2)) //Vertical
-                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + (drapHeight * 1) + (drapWidth * (i+1))]));
-                if(i < (drapWidth-2)) //Horizontal
+                if(i < (drapHeight-2)) { //Vertical
+                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + (drapHeight * 0) + (drapWidth * (i+2))]));
+
+                }
+                if(i < (drapWidth-2)) { //Horizontal
                     smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + 2]));
-                if(i < (drapHeight-1) && j < (drapWidth-1) ) //Diagonal
-                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + 1 + (drapHeight * 0) + (drapWidth * (i+1))]));
+
+                }
                 
+                if(i < (drapHeight-1) && j < (drapWidth-1) ) {//Diagonal
+                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + 1 + (drapHeight * 0) + (drapWidth * (i+1))]));
+
+                }
+                
+
             }
         }
+
+        //Used To Debug all particles in all ressorts
+        /*
+        for(int i =0 ; i < smr->ressorts.size(); i++) {
+            cout << i << " P0 : " << smr->ressorts[i]->P0 << endl;
+            cout << i << " P1 : " << smr->ressorts[i]->P1 << endl;
+        }
+         */
         
         //Create triangle
         for(int i = 0; i < (drapHeight-1); i++) {
