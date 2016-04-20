@@ -9,13 +9,17 @@
 #pragma once
 
 #include "point3d.h"
-#include "smr.h"
 
 #include <list>
 #include <vector>
 
 class CSurface;
 class CTriangle;
+
+class CParticule;
+class CRessort;
+class CSMR;
+class CIntegrateur;
 
 
 extern double mesh_import_scale;

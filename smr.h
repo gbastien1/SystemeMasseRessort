@@ -3,9 +3,11 @@
 
 #include <stdio.h>
 #include <vector>
-#include "mesh.h"
+
+
 
 using namespace std;
+
 
 
 class CParticule {

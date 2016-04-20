@@ -8,6 +8,7 @@
  */
 
 #include "mesh.h"
+#include "smr.h"
 #include "glutil.h" 
 
 
@@ -409,8 +410,8 @@ void CMesh::UpdateVBO(CIntegrateur* integrateur) {
     //modifier vertices du mesh
     for (int i = 0; i < vertices.size(); i++) {
         //TODO do something
-        *vertices[i] += CPoint3D(0.01 ,0,0);
-        //*vertices[i] += integrateur->smr->particules[]->vertex;
+        //*vertices[i] += CPoint3D(0.01 ,0,0);
+        //*vertices[i] = integrateur->smr->particules[i]->vertex;
     }
     
     //remplir buf_vtx avec les nouvelles données
