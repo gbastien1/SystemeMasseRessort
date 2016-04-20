@@ -10,11 +10,13 @@
 #include "mesh.h"
 #include "glutil.h" 
 
+
 #include <iostream>
 #include <fstream>
 #include <OpenGL/gl3.h>
 #include <cstdlib>
 #include <cmath>
+
 
 using namespace std;
 
@@ -399,7 +401,7 @@ void CMesh::DrawLine(GLint prog)
 }
 
 // GB VBO update
-void CMesh::UpdateVBO() {
+void CMesh::UpdateVBO(CIntegrateur* integrateur) {
     glBindBuffer(GL_ARRAY_BUFFER, ogl_buf_vextex_id);
     GLfloat* buf_vtx = (GLfloat*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
     
@@ -408,6 +410,7 @@ void CMesh::UpdateVBO() {
     for (int i = 0; i < vertices.size(); i++) {
         //TODO do something
         *vertices[i] += CPoint3D(0.01 ,0,0);
+        //*vertices[i] += integrateur->smr->particules[]->vertex;
     }
     
     //remplir buf_vtx avec les nouvelles données
