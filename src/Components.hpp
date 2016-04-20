@@ -172,8 +172,12 @@ public:
  * Created Springs
  */
 class Drap : public CMesh {
+    CIntegrateur* integrateur;
+    
 public:
-    Drap(CIntegrateur *integrateur) {
+    Drap(CIntegrateur *_integrateur) {
+        
+        integrateur = _integrateur;
         CSMR* smr = new CSMR();
         float masse = 1;
         int drapWidth = 40;
