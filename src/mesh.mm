@@ -416,18 +416,33 @@ void CMesh::DrawLine(GLint prog)
     glDisableVertexAttribArray(attrib_normal);
 }
 
+#define PI 3.14159
+
+CVect3D fGravite() {
+    return CVect3D(0, -1, 0);
+}
+
+CVect3D fVent(CPoint3D pos, float t) {
+    float amplitude = 0.08;
+    float frequence = 0.5;
+    float vitesse = 4.0;
+    float x = pos[0];
+    float y = pos[1];
+    
+    return CVect3D(0, 0, exp(0.5/y) * amplitude * sin((2*PI*frequence*y + 1) + (vitesse*t)));
+}
+
 // GB VBO update
-void CMesh::UpdateVBO(CIntegrateur* integrateur) {
+void CMesh::UpdateVBO(CIntegrateur* integrateur, float t) {
     glBindBuffer(GL_ARRAY_BUFFER, ogl_buf_vextex_id);
     GLfloat* buf_vtx = (GLfloat*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
     
-    //Transformations du VBO
+    //Transformations du VBO TODO
     //modifier vertices du mesh
     for (int i = 0; i < vertices.size(); i++) {
-        //TODO do something
-        cout << i;
-        *vertices[i] = *integrateur->smr->particules[i]->vertex;;
-        //vertices[i] += CPoint3D(0.5 ,0,0);
+        //*vertices[i] = *integrateur->smr->particules[i]->vertex;
+        CPoint3D pos = CPoint3D((*vertices[i])[0],(*vertices[i])[1],(*vertices[i])[2]);
+        *vertices[i] += fVent(pos, t) + fGravite();
     }
     cout << endl;
     
