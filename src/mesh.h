@@ -9,6 +9,7 @@
 #pragma once
 
 #include "point3d.h"
+#include "smr.h"
 
 #include <list>
 #include <vector>
@@ -102,7 +103,7 @@ public:
     
     void    UpdateNormals();
     
-    void    UpdateVBO();
+    void    UpdateVBO(CIntegrateur* integrateur);
     
 protected:
     
