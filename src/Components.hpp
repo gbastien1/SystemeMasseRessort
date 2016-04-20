@@ -175,7 +175,7 @@ class Drap : public CMesh {
     CIntegrateur* integrateur;
     
 public:
-    Drap(CIntegrateur *_integrateur) {
+    Drap(CIntegrateur* _integrateur) {
         
         integrateur = _integrateur;
         CSMR* smr = new CSMR();
@@ -293,4 +293,6 @@ public:
             }
         }
     }
+    
+    CIntegrateur* getIntegrateur() {return integrateur;}
 };
