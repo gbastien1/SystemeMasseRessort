@@ -205,40 +205,37 @@ public:
                 int particuleIndex = (i*drapWidth) + (j);
                 //Lenght 1
                 if(i < (drapHeight-1)) { //Vertical
-                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + (drapHeight * 0) + (drapWidth * (i+1))]));
-
+                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + (drapWidth)]));
                 }
                 if(j < (drapWidth-1)) { //Horizontal
                     smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + 1]));
-
                 }
 
                 //Lenght 2
                 if(i < (drapHeight-2)) { //Vertical
-                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + (drapHeight * 0) + (drapWidth * (i+2))]));
+                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + (drapWidth * 2)]));
 
                 }
-                if(i < (drapWidth-2)) { //Horizontal
+                if(j < (drapWidth-2)) { //Horizontal
                     smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + 2]));
-
                 }
                 
                 if(i < (drapHeight-1) && j < (drapWidth-1) ) {//Diagonal
-                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + 1 + (drapHeight * 0) + (drapWidth * (i+1))]));
-
+                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + 1 + (drapWidth)]));
                 }
                 
 
             }
         }
 
-        //Used To Debug all particles in all ressorts
+        //Used To Debug all particules in all ressorts
         /*
         for(int i =0 ; i < smr->ressorts.size(); i++) {
             cout << i << " P0 : " << smr->ressorts[i]->P0 << endl;
             cout << i << " P1 : " << smr->ressorts[i]->P1 << endl;
         }
          */
+         
         
         //Create triangle
         for(int i = 0; i < (drapHeight-1); i++) {
