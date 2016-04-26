@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <vector>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -53,15 +54,22 @@ public:
     CParticule *P0, *P1;
     float longueur_repos;
     float k; //constante de Hooke (rigidité)
+    float amortissement = 20;
     
     //calcule la force du ressort
-    CVect3D F() const {
-        return CVect3D(0,0,0);
+    CVect3D F(const bool isFirst) const {
+        CVect3D ressortForce = CVect3D(0,0,0);
+        
+        if(isFirst) {
+            ressortForce = (-k * (abs(P0->pos - P1->pos) - longueur_repos)) - (amortissement * P0->vel[1]);
+        } else {
+            ressortForce = (-k * (abs(P1->pos - P0->pos) - longueur_repos)) - (amortissement * P1->vel[1]);
+        }
+        
+        
+        return ressortForce;
     }
-    //calcule la force du ressort
-    CVect3D F2() const {
-        return CVect3D(0,0,0);
-    }
+
 };
 
 class CSMR {
@@ -85,19 +93,20 @@ class CIntegrateur {
 public:
     CSMR* smr;
     
+    
     //TODO debug adding forces
     void step(){
         
         //Force de gravité
         for(int i =0 ; i < smr->particules.size(); i++) {
             
-            smr->particules[i]->force = CVect3D(0,-0.001,0);
+            smr->particules[i]->force = CVect3D(0,-0.0001,0);
         }
         //Force des ressorts
         for(int i =0 ; i < smr->ressorts.size(); i++) {
             //cout << i << " F : " << smr->ressorts[i]->P1 << endl;
-            //smr->ressorts[i]->P0->force += smr->ressorts[i]->F();
-            //smr->ressorts[i]->P1->force += smr->ressorts[i]->F2();
+            smr->ressorts[i]->P0->force += smr->ressorts[i]->F(true);
+            smr->ressorts[i]->P1->force -= smr->ressorts[i]->F(false);
         }
         //Force du vent
         for(int i =0 ; i < smr->particules.size(); i++) {
@@ -106,20 +115,19 @@ public:
 
         
         //Updater position et velocite des particules en fonction de la force calculée
-        for(int i =0 ; i < smr->particules.size(); i++) {
+        //on ne touche pas les 40 premieres particules pour qu`elles restent attachées au poteau
+        for(int i =40 ; i < smr->particules.size(); i++) {
             CParticule *p = smr->particules[i];
             //F = ma   -> a = F/M
             CVect3D a = p->force / p->masse;
-            //cout << "force: (" << p->force[0] << ", " << p->force[1] << ")" << endl;
+            //update des anciennes coordonnées
             p->vel[0] = p->vel[1];
             p->pos[0] = p->pos[1];
-            //cout << "pos: 1(" << p->pos[1][0] << ", " << p->pos[1][1] << ")";
-            
+            //update des coordonnées courantes
             p->vel[1] += a;
             p->pos[1] += p->vel[1];
-            
+            //update de la position
             *p->vertex += p->pos[1];
-            //cout << "pos 2: (" << p->pos[1][0] << ", " << p->pos[1][1] << ")";
         }
     }
 };

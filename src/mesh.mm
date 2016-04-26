@@ -423,14 +423,8 @@ void CMesh::UpdateVBO(CIntegrateur* integrateur, float t) {
     glBindBuffer(GL_ARRAY_BUFFER, ogl_buf_vextex_id);
     GLfloat* buf_vtx = (GLfloat*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
     
-    //Transformations du VBO TODO
-    //modifier vertices du mesh
-    for (int i = 0; i < vertices.size(); i++) {
-        cout << "pos avant: (" << integrateur->smr->particules[i]->pos[1][0] << ", " << integrateur->smr->particules[i]->pos[1][1] << ")";
-        *vertices[i] = *integrateur->smr->particules[i]->vertex;
-        cout << "  pos apres: (" << integrateur->smr->particules[i]->pos[1][0] << ", " << integrateur->smr->particules[i]->pos[1][1] << ")" << endl;
-    }
-    cout << endl;
+    //Transformations du VBO
+    integrateur->step();
     
     //remplir buf_vtx avec les nouvelles données
     GLfloat* pv = buf_vtx;
