@@ -181,7 +181,7 @@ public:
         CSMR* smr = new CSMR();
         integrateur->smr = smr;
         
-        float masse = 1;
+        float masse = 1000;
         int drapWidth = 40;
         int drapHeight = 30;
         
