@@ -4,22 +4,11 @@
 #include <stdio.h>
 #include <vector>
 #include <stdlib.h>
+#include <math.h>
 
 using namespace std;
 
 #define PI 3.14159
-
-
-
-/*CVect3D fVent(CPoint3D pos, float t) {
- float amplitude = 0.08;
- float frequence = 0.5;
- float vitesse = 4.0;
- float x = pos[0];
- float y = pos[1];
- 
- return CVect3D(0, 0, exp(0.5/y) * amplitude * sin((2*PI*frequence*y + 1) + (vitesse*t)));
- }*/
 
 
 class CParticule {
@@ -34,16 +23,19 @@ public:
         force = CVect3D(0,0,0);
     }
     
+    vector<CRessort*> ressortsAdjacents;
     CVertex* vertex; //sommet du maillage associé à la particule
     CPoint3D pos[2];
     CVect3D vel[2];
     float masse;
     CVect3D force;
+    
+    void sumForce();
 };
 
 class CRessort {
 public:
-    CRessort(CParticule* _p0, CParticule* _p1, float _long = 0.1, float _k = 100) {
+    CRessort(CParticule* _p0, CParticule* _p1, float _long = 0.0001, float _k = 20) {
         P0 = _p0;
         P1 = _p1;
         longueur_repos = _long;
@@ -54,7 +46,7 @@ public:
     CParticule *P0, *P1;
     float longueur_repos;
     float k; //constante de Hooke (rigidité)
-    float amortissement = 0.02;
+    float amortissement = 200;
     
     CVect3D VecteurUnitaire(CVect3D X, CVect3D Y) const{
         if( Module(X-Y) == 0) return CVect3D(0,0,0);
@@ -65,16 +57,11 @@ public:
     //calcule la force du ressort
     CVect3D F(const bool isFirst) const {
         CVect3D ressortForce = CVect3D(0,0,0);
-        
         if(isFirst) {
-            //cout << P0->pos[0][0] << " " << P0->pos[0][1] << " "<< P0->pos[0][2] << endl;
-            //cout << P1->pos[0][0] << " " << P1->pos[0][1] << " "<< P1->pos[0][2] << endl;
             ressortForce = ((-k * (Module(P0->pos[0] - P1->pos[0]) - longueur_repos)) * VecteurUnitaire(P0->pos[0],P1->pos[0])) - (amortissement * P0->vel[0]);
         } else {
             ressortForce = ((-k * (Module(P1->pos[0] - P0->pos[0]) - longueur_repos)) * VecteurUnitaire(P1->pos[0],P0->pos[0])) - (amortissement * P1->vel[0]);
         }
-        
-        //cout << ressortForce[0] << " " << ressortForce[1] << " "<< ressortForce[2] << endl;
         return ressortForce;
     }
 
@@ -93,7 +80,7 @@ public:
         //float x = pos[0];
         float y = pos[1];
         
-        return CVect3D(0, 0, exp(0.5/y) * amplitude * sin((2*PI*frequence*y + 1)));
+        return CVect3D(0, 0, 0.0001*(exp(0.5/y) * amplitude * sin((2*PI*frequence*y + 1))));
     }
 };
 
@@ -105,27 +92,29 @@ public:
     //TODO debug adding forces
     void step(){
         
-        float integrationStep = 0.001;
+        float gravity = 0;
+        float integrationStep = 0.5;
         
-        //Force de gravité
+        
         for(int i =0 ; i < smr->particules.size(); i++) {
-            smr->particules[i]->force = CVect3D(0,-10,0);
-        }
-        //Force des ressorts
-        for(int i =0 ; i < smr->ressorts.size(); i++) {
-            //cout << i << " F : " << smr->ressorts[i]->P1 << endl;
-            smr->ressorts[i]->P0->force += smr->ressorts[i]->F(true);
-            smr->ressorts[i]->P1->force += smr->ressorts[i]->F(false);
+            //force de gravité
+            smr->particules[i]->force = CVect3D(0,gravity,0);
+            //force des ressorts
+            smr->particules[i]->sumForce();
         }
         //Force du vent
         for(int i =0 ; i < smr->particules.size(); i++) {
             //smr->particules[i]->force += smr->fVent(smr->particules[i]->pos[0]);//, t);
+            //smr->particules[i]->force += CVect3D(0,0,0.1);
         }
         
+        for(int i =0 ; i < 40; i++) {
+            smr->particules[i]->force = CVect3D(0,0,0);
+        }
         
         //Updater position et velocite des particules en fonction de la force calculée
         //on ne touche pas les 40 premieres particules pour qu`elles restent attachées au poteau
-        for(int i =40 ; i < smr->particules.size(); i++) {
+        for(int i = 0 ; i < smr->particules.size(); i++) {
             CParticule *p = smr->particules[i];
             //F = ma   -> a = F/M
             CVect3D a = p->force / p->masse;
@@ -133,15 +122,18 @@ public:
             p->vel[0] = p->vel[1];
             p->pos[0] = p->pos[1];
             //update des coordonnées courantes
-            p->vel[1] += (integrationStep * a);
-            p->pos[1] += (integrationStep * p->vel[1]);
+            p->vel[1] = p->vel[0] + (integrationStep * a);
+            p->pos[1] = p->pos[0] + (integrationStep * p->vel[1]);
             //update de la position
-            *p->vertex += p->pos[1];
+            *p->vertex += p->pos[0];
         }
         
 
     }
 };
+
+
+
 
 
 #endif /* smr_h */

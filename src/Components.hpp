@@ -205,24 +205,39 @@ public:
                 int particuleIndex = (i*drapWidth) + (j);
                 //Lenght 1
                 if(i < (drapHeight-1)) { //Vertical
-                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + (drapWidth)]));
+                    CRessort *r = new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + (drapWidth)]);
+                    smr->ressorts.push_back(r);
+                    smr->particules[particuleIndex]->ressortsAdjacents.push_back(r);
+                    smr->particules[particuleIndex + (drapWidth)]->ressortsAdjacents.push_back(r);
                 }
                 if(j < (drapWidth-1)) { //Horizontal
-                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + 1]));
+                    CRessort *r = new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + 1]);
+                    smr->ressorts.push_back(r);
+                    smr->particules[particuleIndex]->ressortsAdjacents.push_back(r);
+                    smr->particules[particuleIndex + 1]->ressortsAdjacents.push_back(r);
                 }
 
                 //Lenght 2
-                if(i < (drapHeight-2)) { //Vertical
-                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + (drapWidth * 2)]));
+                /*if(i < (drapHeight-2)) { //Vertical
+                    CRessort *r = new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + (drapWidth * 2)]);
+                    smr->ressorts.push_back(r);
+                    smr->particules[particuleIndex]->ressortsAdjacents.push_back(r);
+                    smr->particules[particuleIndex + (drapWidth * 2)]->ressortsAdjacents.push_back(r);
 
                 }
                 if(j < (drapWidth-2)) { //Horizontal
-                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + 2]));
+                    CRessort *r = new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + 2]);
+                    smr->ressorts.push_back(r);
+                    smr->particules[particuleIndex]->ressortsAdjacents.push_back(r);
+                    smr->particules[particuleIndex + 2]->ressortsAdjacents.push_back(r);
                 }
                 
                 if(i < (drapHeight-1) && j < (drapWidth-1) ) {//Diagonal
-                    smr->ressorts.push_back(new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + 1 + (drapWidth)]));
-                }
+                    CRessort *r = new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + 1 + (drapWidth)]);
+                    smr->ressorts.push_back(r);
+                    smr->particules[particuleIndex]->ressortsAdjacents.push_back(r);
+                    smr->particules[particuleIndex + 1 + (drapWidth)]->ressortsAdjacents.push_back(r);
+                }*/
                 
 
             }
