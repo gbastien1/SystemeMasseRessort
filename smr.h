@@ -97,22 +97,23 @@ public:
     //TODO debug adding forces
     void step(){
         
+        float integrationStep = 0.00001;
+        
         //Force de gravité
         for(int i =0 ; i < smr->particules.size(); i++) {
-            
             smr->particules[i]->force = CVect3D(0,-0.0001,0);
         }
         //Force des ressorts
         for(int i =0 ; i < smr->ressorts.size(); i++) {
             //cout << i << " F : " << smr->ressorts[i]->P1 << endl;
             smr->ressorts[i]->P0->force += smr->ressorts[i]->F(true);
-            smr->ressorts[i]->P1->force -= smr->ressorts[i]->F(false);
+            smr->ressorts[i]->P1->force += smr->ressorts[i]->F(false);
         }
         //Force du vent
         for(int i =0 ; i < smr->particules.size(); i++) {
             //smr->particules[i]->force += smr->fVent(smr->particules[i]->pos[0]);//, t);
         }
-
+        
         
         //Updater position et velocite des particules en fonction de la force calculée
         //on ne touche pas les 40 premieres particules pour qu`elles restent attachées au poteau
@@ -124,11 +125,13 @@ public:
             p->vel[0] = p->vel[1];
             p->pos[0] = p->pos[1];
             //update des coordonnées courantes
-            p->vel[1] += a;
-            p->pos[1] += p->vel[1];
+            p->vel[1] += (integrationStep * a);
+            p->pos[1] += (integrationStep * p->vel[1]);
             //update de la position
             *p->vertex += p->pos[1];
         }
+        
+
     }
 };
 
