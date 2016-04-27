@@ -99,6 +99,8 @@ public:
         for(int i =0 ; i < smr->particules.size(); i++) {
             //force de gravité
             smr->particules[i]->force = CVect3D(0,gravity,0);
+            //force du vent
+            //smr->particules[i]->force = CVect3D(0,0,((float)i/(float)40) * (0.01 + 0.01 * sin((float)i/(float)30)));    // Vent
             //force des ressorts
             smr->particules[i]->sumForce();
         }
