@@ -54,19 +54,27 @@ public:
     CParticule *P0, *P1;
     float longueur_repos;
     float k; //constante de Hooke (rigidité)
-    float amortissement = 20;
+    float amortissement = 0.02;
+    
+    CVect3D VecteurUnitaire(CVect3D X, CVect3D Y) const{
+        if( Module(X-Y) == 0) return CVect3D(0,0,0);
+        CVect3D vecUni = (X-Y) / Module(X-Y);
+        return vecUni;
+    }
     
     //calcule la force du ressort
     CVect3D F(const bool isFirst) const {
         CVect3D ressortForce = CVect3D(0,0,0);
         
         if(isFirst) {
-            ressortForce = (-k * (abs(P0->pos - P1->pos) - longueur_repos)) - (amortissement * P0->vel[1]);
+            //cout << P0->pos[0][0] << " " << P0->pos[0][1] << " "<< P0->pos[0][2] << endl;
+            //cout << P1->pos[0][0] << " " << P1->pos[0][1] << " "<< P1->pos[0][2] << endl;
+            ressortForce = ((-k * (Module(P0->pos[0] - P1->pos[0]) - longueur_repos)) * VecteurUnitaire(P0->pos[0],P1->pos[0])) - (amortissement * P0->vel[0]);
         } else {
-            ressortForce = (-k * (abs(P1->pos - P0->pos) - longueur_repos)) - (amortissement * P1->vel[1]);
+            ressortForce = ((-k * (Module(P1->pos[0] - P0->pos[0]) - longueur_repos)) * VecteurUnitaire(P1->pos[0],P0->pos[0])) - (amortissement * P1->vel[0]);
         }
         
-        
+        //cout << ressortForce[0] << " " << ressortForce[1] << " "<< ressortForce[2] << endl;
         return ressortForce;
     }
 
@@ -97,11 +105,11 @@ public:
     //TODO debug adding forces
     void step(){
         
-        float integrationStep = 0.00001;
+        float integrationStep = 0.001;
         
         //Force de gravité
         for(int i =0 ; i < smr->particules.size(); i++) {
-            smr->particules[i]->force = CVect3D(0,-0.0001,0);
+            smr->particules[i]->force = CVect3D(0,-10,0);
         }
         //Force des ressorts
         for(int i =0 ; i < smr->ressorts.size(); i++) {
