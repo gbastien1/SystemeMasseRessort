@@ -416,6 +416,7 @@ static const float rot_factor = 0.25;
     
     ((Drap*)drap)->getIntegrateur()->step();
     drap->UpdateVBO(((Drap*)drap)->getIntegrateur(), realTime);
+    drap->UpdateNormals();
 
     
     [self setNeedsDisplay:YES];

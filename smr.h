@@ -37,7 +37,7 @@ public:
 
 class CRessort {
 public:
-    CRessort(CParticule* _p0, CParticule* _p1, float _long = 0.001, float _k = 50) {
+    CRessort(CParticule* _p0, CParticule* _p1, float _long = 0.0005, float _k = 90) {
         P0 = _p0;
         P1 = _p1;
         longueur_repos = _long;
@@ -102,15 +102,15 @@ public:
     //TODO debug adding forces
     void step(){
         
-        float gravity = -1;
-        float integrationStep = 0.1;
+        float gravity = -0.002;
+        float integrationStep = 0.07;
         
         
         for(int i =0 ; i < smr->particules.size(); i++) {
             //force de gravité
             smr->particules[i]->force = CVect3D(0,gravity,0);
             //force du vent
-            smr->particules[i]->force = 0.01*CVect3D(0,0,((float)i/(float)40) * (0.01 + 0.01 * sin((float)i/(float)30)));    // Vent
+            smr->particules[i]->force += 0.01*CVect3D(0,0,((float)i/(float)40) * (0.01 + 0.01 * sin((float)i/(float)30)));    // Vent
             //force des ressorts
             smr->particules[i]->sumForce();
         }
