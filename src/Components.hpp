@@ -181,18 +181,21 @@ public:
         CSMR* smr = new CSMR();
         integrateur->smr = smr;
         
-        float masse = 1000;
+        float masse = 100;
         int drapWidth = 40;
         int drapHeight = 30;
         
         
         //Create Vertex and particules
         int index = 0;
+        
         for(float i = 0; i < drapHeight; i++) {
             for(float j = 0; j < drapWidth; j++) {
+                bool isFixed = false;
                 CVertex* v = new CVertex(index, CPoint3D(-0 + (j/10), 0 - (i/10), 0), (j / drapWidth), ((i / drapHeight)));
                 vertices.push_back(v);
-                smr->particules.push_back(new CParticule(v, masse));
+                if (i == 0) isFixed = true;
+                smr->particules.push_back(new CParticule(v, masse, isFixed));
                 index++;
                 
             }
@@ -218,7 +221,7 @@ public:
                 }
 
                 //Lenght 2
-                /*if(i < (drapHeight-2)) { //Vertical
+                if(i < (drapHeight-2)) { //Vertical
                     CRessort *r = new CRessort(smr->particules[particuleIndex],smr->particules[particuleIndex + (drapWidth * 2)]);
                     smr->ressorts.push_back(r);
                     smr->particules[particuleIndex]->ressortsAdjacents.push_back(r);
@@ -237,7 +240,7 @@ public:
                     smr->ressorts.push_back(r);
                     smr->particules[particuleIndex]->ressortsAdjacents.push_back(r);
                     smr->particules[particuleIndex + 1 + (drapWidth)]->ressortsAdjacents.push_back(r);
-                }*/
+                }
                 
 
             }
